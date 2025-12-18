@@ -1,61 +1,94 @@
-Project Overview
+# SafeShort – Secure Backend URL Management Service
 
-SafeShort is a secure, fast, and lightweight URL shortening platform that integrates malicious URL detection, hash-based short code generation, and safe redirection logic.
-Built using Python, Flask, and SQLite.
+SafeShort is an API-first backend service for creating, managing, and tracking shortened URLs.
+The project focuses on clean REST API design, backend lifecycle management, and secure input
+handling without relying on frontend templates.
 
-This project demonstrates skills in:
+This project is intended to demonstrate backend engineering fundamentals such as API development,
+database integration, validation, and usage analytics.
 
--Backend API development
--Secure input handling
--Database operations
--Hashing algorithms
--Web application security
--Clean UI development
+## Features
 
-Key Features
-1. Malicious URL Detection
+- REST APIs for creating short URLs
+- URL redirection with lifecycle and expiry checks
+- Click tracking and access analytics
+- Active and inactive URL state management
+- Secure input validation and error handling
 
-Identifies harmful URLs using predefined keyword patterns
-Protects users from phishing / malware / scam domains
-Rejects suspicious URLs and alerts the user
+## Tech Stack
 
-2. 6-Character Hash-Based Short Codes
+- Python
+- Flask
+- SQLite
+- SQLAlchemy
 
-Uses MD5 hashing (truncated) for a deterministic short code
-Ensures minimal collision and fast generation
+## API Endpoints
 
-3. SQLite Database Integration
+### Create Short URL
 
-Stores URL mappings locally
-Many-to-one mapping (same long URL → same short code)
+**POST** '/api/shorten'
 
-4. Secure & Fast Redirection
-
-Secure lookup of long URLs using parameterized queries
-Automatic redirect from /<shortcode> to the original URL
-
-5. Clean User Interface
-
-Simple input form
-Easy-to-read success pages
-Professional CSS styling
-
-Technical Concepts Demonstrated
--Area	Implementation
--Backend	Flask routes, POST/GET requests, redirects
--Security	Malicious URL detection, input validation
--Hashing	MD5-based short code generation
--Database	SQLite schema creation + CRUD
--Frontend	HTML, CSS
--Deployment Ready	Lightweight, easy to host anywhere
-
-Tech Stack
-
-Python 3
-Flask
-SQLite
-HTML5
-CSS3
+Request Body:
+json
+{
+  "url": "https://example.com",
+  "expiry_days": 7
+}
 
 
+Response:
+json
+{
+  "short_code": "AbC123"
+}
 
+
+### Redirect to Original URL
+
+**GET** '/api/<short_code>'
+
+Redirects to the original URL if the short link is active and not expired.
+
+### View URL Analytics
+
+**GET** '/api/stats/<short_code>'
+
+Response:
+json
+{
+  "original_url": "https://example.com",
+  "click_count": 3,
+  "created_at": "2025-09-18T10:12:44",
+  "last_accessed_at": "2025-09-18T11:02:10",
+  "is_active": true
+}
+
+
+## How to Run Locally
+
+1. Clone the repository
+2. Create and activate a virtual environment
+3. Install dependencies:
+   'bash'
+   pip install -r requirements.txt
+   
+4. Run the application:
+   'bash'
+   python app.py
+   
+
+The API will be available at:
+
+http://127.0.0.1:5000
+
+
+## Project Design Notes
+
+- The project is designed as an API-first backend service.
+- Frontend templates are intentionally excluded to focus on backend logic.
+- Clear separation of routing, business logic, and data models is maintained.
+- Emphasis is placed on correctness, validation, and maintainable backend code.
+
+## License
+
+This project is created for learning and demonstration purposes.
